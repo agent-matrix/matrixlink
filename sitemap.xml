@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://your-org.github.io/matrixlink-suite/</loc>
+         <loc>https://agent-matrix.github.io/matrixlink/</loc>
          <lastmod>2025-09-20</lastmod>
     </url>
     <url>
-         <loc>https://your-org.github.io/matrixlink-suite/api/</loc>
+         <loc>https://agent-matrix.github.io/matrixlink/api/</loc>
          <lastmod>2025-09-20</lastmod>
     </url>
     <url>
-         <loc>https://your-org.github.io/matrixlink-suite/configuration/</loc>
+         <loc>https://agent-matrix.github.io/matrixlink/configuration/</loc>
          <lastmod>2025-09-20</lastmod>
     </url>
     <url>
-         <loc>https://your-org.github.io/matrixlink-suite/deploy/</loc>
+         <loc>https://agent-matrix.github.io/matrixlink/deploy/</loc>
          <lastmod>2025-09-20</lastmod>
     </url>
     <url>
-         <loc>https://your-org.github.io/matrixlink-suite/faq/</loc>
+         <loc>https://agent-matrix.github.io/matrixlink/faq/</loc>
          <lastmod>2025-09-20</lastmod>
     </url>
     <url>
-         <loc>https://your-org.github.io/matrixlink-suite/matrixhub-matrixlink/</loc>
+         <loc>https://agent-matrix.github.io/matrixlink/matrixhub-matrixlink/</loc>
          <lastmod>2025-09-20</lastmod>
     </url>
     <url>
-         <loc>https://your-org.github.io/matrixlink-suite/mcpgateway/</loc>
+         <loc>https://agent-matrix.github.io/matrixlink/mcpgateway/</loc>
          <lastmod>2025-09-20</lastmod>
     </url>
     <url>
-         <loc>https://your-org.github.io/matrixlink-suite/quickstart/</loc>
+         <loc>https://agent-matrix.github.io/matrixlink/quickstart/</loc>
          <lastmod>2025-09-20</lastmod>
     </url>
     <url>
-         <loc>https://your-org.github.io/matrixlink-suite/security/</loc>
+         <loc>https://agent-matrix.github.io/matrixlink/security/</loc>
          <lastmod>2025-09-20</lastmod>
     </url>
     <url>
-         <loc>https://your-org.github.io/matrixlink-suite/troubleshooting/</loc>
+         <loc>https://agent-matrix.github.io/matrixlink/troubleshooting/</loc>
          <lastmod>2025-09-20</lastmod>
     </url>
 </urlset>
