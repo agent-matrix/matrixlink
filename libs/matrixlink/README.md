@@ -16,7 +16,7 @@
 
 ---
 
-## Why MatrixLink (especially for consulting firms)
+## Why MatrixLink
 
 Consultancies need to deliver reliable AI workflows quickly, across many client environments, with minimal rework:
 
