@@ -38,7 +38,7 @@ dependencies = [
 Homepage = "https://github.com/agent-matrix/matrixlink"
 Repository = "https://github.com/agent-matrix/matrixlink"
 Issues = "https://github.com/agent-matrix/matrixlink/issues"
-Documentation = "https://agent-matrix.github.io/matrixlink-suite/"
+Documentation = "https://agent-matrix.github.io/matrixlink/"
 
 [tool.setuptools.packages.find]
 where = ["src"]
