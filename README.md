@@ -29,27 +29,26 @@ All services bind to port **8080**. East–west calls use **Bearer service token
 ---
 
 ## Architecture
-
 ```mermaid
 flowchart TD
-  subgraph EXT[External]
-    UI[Clients / Apps / Chat UI]
+  subgraph EXT["External"]
+    UI["Clients / Apps / Chat UI"]
   end
 
-  subgraph EDGE[API Gateway / Front Door (public)]
-    APIGW[https://your-host/api/*]
+  subgraph EDGE["API Gateway / Front Door (public)"]
+    APIGW["https://your-host/api/*"]
   end
 
-  subgraph CTRL[Control Plane]
-    MCP[MCP Gateway (registry, discovery, health)]
+  subgraph CTRL["Control Plane"]
+    MCP["MCP Gateway (registry, discovery, health)"]
   end
 
-  subgraph RUNTIME[Serverless / Containers (:8080)]
-    BFF[BFF (Front Door + MCP proxy)]
-    ORCH[Orchestrator(s) (MCP Servers)]
-    A1[A2A Agents (skills)]
-    A2[A2A Agents (skills)]
-    AX[… more Agents]
+  subgraph RUNTIME["Serverless / Containers (:8080)"]
+    BFF["BFF (Front Door + MCP proxy)"]
+    ORCH["Orchestrator(s) (MCP Servers)"]
+    A1["A2A Agents (skills)"]
+    A2["A2A Agents (skills)"]
+    AX["… more Agents"]
   end
 
   UI --> APIGW
@@ -62,6 +61,7 @@ flowchart TD
   ORCH --> A2
   ORCH --> AX
 ```
+
 
 **Public API (edge):**
 
