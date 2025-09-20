@@ -1,0 +1,11 @@
+name: Deploy to Code Engine
+on:
+  workflow_run:
+    workflows: ["Build BFF", "Build Admin UI"]
+    types: [completed]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        run: echo "ibmcloud ce app update --name bff --image ${REGISTRY}/${NAMESPACE}/bff:${GITHUB_SHA}"

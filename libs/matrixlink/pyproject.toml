@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "matrixlink"
+version = "0.2.0"
+description = "MatrixLink — Client for MCP Gateway discovery, Orchestrator invoke, and A2A agent messaging."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+keywords = ["mcp", "a2a", "agents", "gateway", "discovery", "orchestrator", "matrixhub"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Typing :: Typed",
+]
+
+authors = [
+  { name = "MatrixHub", email = "contact@ruslanmv.com" }
+]
+
+dependencies = [
+  "httpx>=0.27,<0.29",
+  "sseclient-py>=1.8,<2.0",
+  "python-dotenv>=1.0,<2.0",
+  "truststore>=0.8; python_version >= '3.11'",
+  "tomli>=2.0.1; python_version < '3.11'",
+]
+
+[project.urls]
+Homepage = "https://github.com/agent-matrix/matrixlink"
+Repository = "https://github.com/agent-matrix/matrixlink"
+Issues = "https://github.com/agent-matrix/matrixlink/issues"
+Documentation = "https://agent-matrix.github.io/matrixlink-suite/"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["matrixlink*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "C90"]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 15
+
+[tool.mypy]
+namespace_packages = true
+explicit_package_bases = true
+ignore_missing_imports = true

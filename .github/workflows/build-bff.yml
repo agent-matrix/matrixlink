@@ -1,0 +1,11 @@
+name: Build BFF
+on:
+  push:
+    paths: ["apps/bff/**"]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: echo "docker build -f apps/bff/Dockerfile -t ${REGISTRY}/${NAMESPACE}/bff:${GITHUB_SHA} ."

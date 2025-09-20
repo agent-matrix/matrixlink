@@ -1,0 +1,30 @@
+docs_dir: docs
+site_name: MatrixLink Suite
+site_description: MCP Gateway + Orchestrators + A2A Agents — on any platform.
+site_url: https://your-org.github.io/matrixlink-suite
+repo_url: https://github.com/your-org/matrixlink-suite
+nav:
+  - Home: index.md
+  - Quickstart: quickstart.md
+  - MatrixHub vs MatrixLink: matrixhub-matrixlink.md
+  - MCP Gateway: mcpgateway.md
+  - Configuration: configuration.md
+  - Deploy: deploy.md
+  - API: api.md
+  - Security & Ops: security.md
+  - Troubleshooting: troubleshooting.md
+  - FAQ: faq.md
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.instant
+    - content.code.copy
+markdown_extensions:
+  - admonition
+  - codehilite
+  - toc:
+      permalink: true
+  - tables
+plugins:
+  - search

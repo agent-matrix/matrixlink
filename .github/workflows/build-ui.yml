@@ -1,0 +1,11 @@
+name: Build Admin UI
+on:
+  push:
+    paths: ["ui/matrixhub-admin/**"]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: echo "docker build -f ui/matrixhub-admin/Dockerfile -t ${REGISTRY}/${NAMESPACE}/matrixhub-admin:${GITHUB_SHA} ui/matrixhub-admin"

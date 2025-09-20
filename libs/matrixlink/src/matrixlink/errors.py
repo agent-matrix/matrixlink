@@ -1,0 +1,2 @@
+class MatrixLinkError(RuntimeError):
+    pass
