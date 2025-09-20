@@ -1,4 +1,20 @@
-# MatrixLink Suite (MatrixHub Ecosystem)
+# ⚡️ MatrixLink Suite
+
+*Production toolkit for **MatrixHub** — discover, select, and run MCP servers (orchestrators) and A2A agents across any cloud.*
+
+<p align="left">
+  <a href="https://pypi.org/project/matrixlink/"><img alt="PyPI Version" src="https://img.shields.io/pypi/v/matrixlink.svg"></a>
+  <a href="https://pypi.org/project/matrixlink/"><img alt="Python Versions" src="https://img.shields.io/pypi/pyversions/matrixlink.svg"></a>
+  <a href="https://github.com/agent-matrix/matrixlink"><img alt="GitHub" src="https://img.shields.io/badge/github-matrixlink--suite?logo=github"></a>
+  <a href="https://agent-matrix.github.io/matrixlink/"><img alt="Docs (MkDocs)" src="https://img.shields.io/badge/docs-mkdocs--material-blue?logo=mkdocs"></a>
+  <a href="./LICENSE"><img alt="License: Apache-2.0" src="https://img.shields.io/badge/license-Apache%202.0-blue"></a>
+  <a href="https://github.com/agent-matrix/matrix-hub"><img alt="Powered by matrix-hub" src="https://img.shields.io/badge/Powered%20by-matrix--hub-brightgreen"></a>
+</p>
+
+> Requires **Python 3.11+**. Library published as **`matrixlink`** on PyPI. BFF/UI run on **:8080**.
+
+---
+
 
 MatrixLink Suite gives you a production-ready base to run **MCP Gateway + Orchestrators (MCP Servers) + A2A Agents** on any modern platform (IBM Code Engine, Google Cloud Run, AWS App Runner, Azure Container Apps, Knative/K8s, Local). It includes:
 
