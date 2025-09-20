@@ -24,36 +24,6 @@
 4. Use MatrixLink from orchestrators/edge → discover and invoke at runtime
 5. Operate rollouts (canary/blue-green) without caller code changes
 
+
 ## Diagram
-```mermaid
-flowchart TD
-  subgraph EXT["External"]
-    UI["Clients / Apps / Chat UI"]
-  end
-
-  subgraph EDGE["API Gateway / Front Door (public)"]
-    APIGW["https://your-host/api/*"]
-  end
-
-  subgraph CTRL["Control Plane"]
-    MCP["MCP Gateway (registry, discovery, health)"]
-  end
-
-  subgraph RUNTIME["Serverless / Containers (:8080)"]
-    BFF["BFF (Front Door + MCP proxy)"]
-    ORCH["Orchestrator(s) (MCP Servers)"]
-    A1["A2A Agents (skills)"]
-    A2["A2A Agents (skills)"]
-    AX["… more Agents"]
-  end
-
-  UI --> APIGW
-  APIGW -- "/api/health|/api/ready|/api/mcp/*|/api/admin/*" --> BFF
-  APIGW -- "/api/chat or /api/flows/<flow>" --> ORCH
-
-  BFF --> MCP
-  ORCH -.->|discover by skill| MCP
-  ORCH --> A1
-  ORCH --> A2
-  ORCH --> AX
-```
+![MatrixLink Usecase Diagram](https://raw.githubusercontent.com/agent-matrix/matrixlink/refs/heads/master/libs/matrixlink/assets/matrixlink-usecase-vertical.svg)

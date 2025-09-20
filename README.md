@@ -225,7 +225,7 @@ print(agents[0]["endpoint"])  # https://agents.../agent-synth
 from matrixlink import A2AClient
 
 a2a = A2AClient()  # uses A2A_SERVICE_TOKEN if set
-endpoint = "[https://agents.example.com/agent-synth](https://agents.example.com/agent-synth)"  # or from discovery
+endpoint = "https://agents.example.com/agent-synth"  # or from discovery
 resp = a2a.send_message(endpoint, {"title": "Weekly Status", "bullets": ["A", "B", "C"]})
 print(resp)
 ```
@@ -234,7 +234,7 @@ print(resp)
 ```python
 from matrixlink import OrchestratorClient
 
-orch = OrchestratorClient("[https://orchestrator.example.com](https://orchestrator.example.com)")
+orch = OrchestratorClient("https://orchestrator.example.com")
 result = orch.invoke("hr.orchestrate", {"candidates":[{"id":"c1","skills":["py","sql"]}]})
 print(result)
 ```
@@ -267,7 +267,7 @@ docker build -f apps/bff/Dockerfile -t local/bff:dev .
 docker run --rm -p 8080:8080 \
   -e CLOUD_PROVIDER=local \
   -e ADMIN_BEARER=changeme-admin-bearer-token \
-  -e MCP_BASE_URL=[http://host.docker.internal:4444](http://host.docker.internal:4444) \
+  -e MCP_BASE_URL=http://host.docker.internal:4444 \
   local/bff:dev
 ```
 **Admin UI**
@@ -299,9 +299,9 @@ docker run --rm -p 8081:8080 local/matrixhub-admin:dev
 **Google Cloud Run** (custom domains recommended)
 ```bash
 CLOUD_PROVIDER=gcrun
-MCP_BASE_URL=[https://mcp-gateway.example.com](https://mcp-gateway.example.com)
-ORCH_BASE_URL=[https://orchestrator.example.com](https://orchestrator.example.com)
-AGENTS_BASE_URL=[https://agents.example.com](https://agents.example.com)
+MCP_BASE_URL=https://mcp-gateway.example.com
+ORCH_BASE_URL=https://orchestrator.example.com
+AGENTS_BASE_URL=https://orchestrator.example.com
 MCP_BEARER_TOKEN=...
 A2A_SERVICE_TOKEN=...
 ```
