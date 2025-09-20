@@ -1,0 +1,192 @@
+name: 📦 Publish Docker (Docker Hub)
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release tag (e.g., v1.2.3 or 1.2.3)"
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dockerhub-publish
+  cancel-in-progress: true
+
+jobs:
+  build-and-push:
+    name: Build & Push (Docker Hub)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Normalize version from release tag or manual input
+      - name: Derive release version
+        id: version
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "release" ]; then
+            RAW="${GITHUB_REF#refs/tags/}"
+          else
+            RAW="${{ github.event.inputs.version }}"
+          fi
+          if [ -z "$RAW" ]; then
+            echo "Version not provided."; exit 1
+          fi
+          if [[ "$RAW" =~ ^v ]]; then
+            RELEASE_TAG="$RAW"
+            SEMVER="${RAW#v}"
+          else
+            RELEASE_TAG="v$RAW"
+            SEMVER="$RAW"
+          fi
+          echo "RELEASE_TAG=$RELEASE_TAG" >> $GITHUB_ENV
+          echo "SEMVER=$SEMVER" >> $GITHUB_ENV
+          echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
+          echo "BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_ENV
+          echo "Resolved RELEASE_TAG=${RELEASE_TAG}, SEMVER=${SEMVER}, SHORT_SHA=${SHORT_SHA}"
+
+      # docker.io requires lowercase namespace
+      - name: Compute image names (lowercase)
+        id: img
+        shell: bash
+        run: |
+          USER_RAW="${{ secrets.DOCKERHUB_USERNAME }}"
+          USER_LC="${USER_RAW,,}"
+          IMAGE_BFF="docker.io/${USER_LC}/matrixlink-bff"
+          IMAGE_UI="docker.io/${USER_LC}/matrixhub-admin"
+          echo "IMAGE_BFF=$IMAGE_BFF" >> $GITHUB_ENV
+          echo "IMAGE_UI=$IMAGE_UI" >> $GITHUB_ENV
+          echo "BFF Image:  $IMAGE_BFF"
+          echo "UI  Image:  $IMAGE_UI"
+
+      - name: Set up QEMU (multi-arch)
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Docker Hub login
+        uses: docker/login-action@v3
+        with:
+          registry: docker.io
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # ---------- BFF metadata ----------
+      - name: Docker metadata (BFF tags & labels)
+        id: meta_bff
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_BFF }}
+          flavor: |
+            latest=false
+          tags: |
+            # stable semver tags (always)
+            type=raw,value=v${{ env.SEMVER }}
+            type=semver,pattern={{version}},value=${{ env.SEMVER }}
+            type=semver,pattern={{major}}.{{minor}},value=${{ env.SEMVER }}
+            type=semver,pattern={{major}},value=${{ env.SEMVER }}
+            # short sha tag (always)
+            type=raw,value=sha-${{ env.SHORT_SHA }}
+            # latest only on release
+            type=raw,value=latest,enable=${{ github.event_name == 'release' }}
+          labels: |
+            org.opencontainers.image.title=matrixlink-bff
+            org.opencontainers.image.description=MatrixLink BFF — public API front door & MCP admin proxy
+            org.opencontainers.image.url=https://github.com/${{ github.repository }}
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.version=${{ env.SEMVER }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.created=${{ env.BUILD_DATE }}
+
+      # ---------- UI metadata ----------
+      - name: Docker metadata (UI tags & labels)
+        id: meta_ui
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_UI }}
+          flavor: |
+            latest=false
+          tags: |
+            # stable semver tags (always)
+            type=raw,value=v${{ env.SEMVER }}
+            type=semver,pattern={{version}},value=${{ env.SEMVER }}
+            type=semver,pattern={{major}}.{{minor}},value=${{ env.SEMVER }}
+            type=semver,pattern={{major}},value=${{ env.SEMVER }}
+            # short sha tag (always)
+            type=raw,value=sha-${{ env.SHORT_SHA }}
+            # latest only on release
+            type=raw,value=latest,enable=${{ github.event_name == 'release' }}
+          labels: |
+            org.opencontainers.image.title=matrixhub-admin
+            org.opencontainers.image.description=MatrixHub Admin UI — browse servers & agents (read-only)
+            org.opencontainers.image.url=https://github.com/${{ github.repository }}
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.version=${{ env.SEMVER }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.created=${{ env.BUILD_DATE }}
+
+      # ---------- Build & push BFF ----------
+      - name: Build & push (BFF to Docker Hub)
+        id: build_bff
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/bff/Dockerfile
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: ${{ steps.meta_bff.outputs.tags }}
+          labels: ${{ steps.meta_bff.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            BUILD_VERSION=${{ env.SEMVER }}
+            BUILD_COMMIT=${{ github.sha }}
+            BUILD_DATE=${{ env.BUILD_DATE }}
+            PIP_INDEX_URL=${{ secrets.PIP_INDEX_URL }}
+
+      # ---------- Build & push UI ----------
+      - name: Build & push (UI to Docker Hub)
+        id: build_ui
+        uses: docker/build-push-action@v6
+        with:
+          context: ui/matrixhub-admin
+          file: ui/matrixhub-admin/Dockerfile
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: ${{ steps.meta_ui.outputs.tags }}
+          labels: ${{ steps.meta_ui.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            BUILD_VERSION=${{ env.SEMVER }}
+            BUILD_COMMIT=${{ github.sha }}
+            BUILD_DATE=${{ env.BUILD_DATE }}
+
+      # Sanity guard — no baked SQLite DBs in BFF image
+      - name: Sanity guard — no baked SQLite DB (BFF)
+        shell: bash
+        run: |
+          REF="$(echo "${{ steps.meta_bff.outputs.tags }}" | head -n1)"
+          docker run --rm --entrypoint /bin/bash "$REF" -lc 'if find /app -maxdepth 6 -name "mcp.db" -o -name "*.sqlite" | grep -q .; then echo "Found SQLite DB in image"; exit 1; fi'
+          echo "OK: no baked SQLite DB in BFF image"
+
+      - name: Inspect multi-arch manifests
+        if: always()
+        shell: bash
+        run: |
+          echo "Inspecting BFF v${SEMVER}…"
+          docker buildx imagetools inspect "${IMAGE_BFF}:v${SEMVER}"
+          echo "Inspecting UI v${SEMVER}…"
+          docker buildx imagetools inspect "${IMAGE_UI}:v${SEMVER}"
+          if [ "${{ github.event_name }}" = "release" ]; then
+            echo "Inspecting latest tags…"
+            docker buildx imagetools inspect "${IMAGE_BFF}:latest"
+            docker buildx imagetools inspect "${IMAGE_UI}:latest"
+          fi
